@@ -1,0 +1,42 @@
+{
+  "name": "express-passport-local-strategy",
+  "version": "1.0.0",
+  "description": "Express application with Oauth-passport to explain loging with local strategy, regarding the youtube tutorial from @bradtraversy",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/silvestrevivo/express-passport-local-strategy.git"
+  },
+  "keywords": [
+    "node",
+    "express",
+    "mongodb",
+    "passport",
+    "authorization"
+  ],
+  "author": "@silvestrevivo",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/silvestrevivo/express-passport-local-strategy/issues"
+  },
+  "homepage": "https://github.com/silvestrevivo/express-passport-local-strategy#readme",
+  "dependencies": {
+    "bcryptjs": "*",
+    "body-parser": "*",
+    "connect-flash": "*",
+    "cookie-parser": "^1.4.1",
+    "express": "*",
+    "express-handlebars": "*",
+    "express-messages": "*",
+    "express-session": "*",
+    "express-validator": "*",
+    "mongodb": "*",
+    "mongoose": "*",
+    "passport": "*",
+    "passport-http": "*",
+    "passport-local": "*"
+  }
+}
