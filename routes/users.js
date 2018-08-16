@@ -2,6 +2,7 @@
 
 const express = require('express')
 const router = express.Router()
+const User = require('../models/users')
 
 // Register page
 router.get('/register', (req, res) => {
@@ -36,7 +37,21 @@ router.post('/register', (req, res) => {
       errors: errors
     })
   } else {
-    console.log('Passed')
+    const newUser = new User({
+      name: name,
+      email: email,
+      username: username,
+      password: password
+    })
+
+    User.createUser(newUser, (err, user) => {
+      if(err) throw err;
+      console.log('this is the user', user)
+    })
+
+    req.flash('success_msg', 'Your are registered and can now login')
+
+    res.redirect('/users/login')
   }
 })
 
