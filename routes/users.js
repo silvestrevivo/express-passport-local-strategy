@@ -41,19 +41,36 @@ router.post('/register', (req, res) => {
       errors: errors,
     })
   } else {
-    const newUser = new User({
-      name: name,
-      email: email,
-      username: username,
-      password: password,
-    })
+    //checking for email and username are already taken
+    User.findOne({ username: {
+      "$regex": "^" + username + "\\b", "$options": "i"
+    }}, function (err, user) {
+      User.findOne({ email: {
+        "$regex": "^" + email + "\\b", "$options": "i"
+      }}, function (err, mail) {
+        if(user || mail){
+          res.render('register', {
+            user: user,
+            mail: mail
+          })
+        } else {
+          let newUser = new User({
+            name: name,
+            email: email,
+            username: username,
+            password: password
+          })
 
-    User.createUser(newUser, (err, user) => {
-      if (err) throw err
+          User.createUser(newUser, function(err, user){
+            if (err) throw err;
+            console.log(user);
 
-      req.flash('success_msg', 'Your are registered and can now login')
+            req.flash('success_msg', 'You are registered and can now login');
 
-      res.redirect('/users/login')
+            res.redirect('/users/login');
+          })
+        }
+      })
     })
   }
 })
