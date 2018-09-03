@@ -33,16 +33,17 @@ module.exports.createUser = function(newUser, callback) {
         throw err
       } else {
         newUser.password = hash
-        console.log('this is the new User encrypted', newUser)
-        // save is a funcion from mongoose
+        /*
+        we save the newUser with the password encrypted
+        save() is a funcion from mongoose
+        */
         newUser.save(callback)
-        console.log('callback sent')
       }
     })
   })
 }
 
-// Controllers
+// Controllers using mongoose functions
 module.exports.getUserByUsername = function(username, callback) {
   let query = { username: username }
   User.findOne(query, callback)

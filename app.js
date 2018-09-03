@@ -13,11 +13,8 @@ const passport = require('passport')
 const mongo = require('mongodb')
 const mongoose = require('mongoose')
 const { mLabDataBase } = require('./config/config')
-//mongoose.connect(mLabDataBase)
-//const db = mongoose.connection
-// mongoose.connection.once('open', () => console.log('Good to go!')).on('error', error => {
-//   console.warn('Warning', error)
-// })
+mongoose.connect(mLabDataBase, { useNewUrlParser: true })
+const db = mongoose.connection
 
 const routes = require('./routes/index')
 const users = require('./routes/users')
@@ -86,31 +83,15 @@ app.use(function(req, res, next) {
 app.use('/', routes)
 app.use('/users', users)
 
-// Set Port
+// Set Port to fire server
 app.set('port', process.env.PORT || 3000)
 
-// // Connection to database
-// mongoose.connection.once('open', () => console.log('Good to go!')).on('error', error => {
-//   console.warn('Warning', error)
-// })
-
-// // Fire the server
-// app.listen(app.get('port'), function() {
-//   console.log('Server started on port ' + app.get('port'))
-// })
-
-mongoose.connect(
-  mLabDataBase,
-  { useNewUrlParser: true },
-  (err, res) => {
-    if (err) {
-      return console.log(`Error connecting to the data base: ${err}`)
-    }
-    console.log('Connected to the data base...')
-
-    // making the app listening to port
-    app.listen(app.get('port'), function() {
-      console.log('Server started on port ' + app.get('port'))
-    })
-  },
-)
+// Once the connection is done, the server gets fired
+db.once('open', () => {
+  // making the app listening to port
+  app.listen(app.get('port'), function() {
+    console.log('Server started on port ' + app.get('port'))
+  })
+}).on('error', error => {
+  return console.warn(`Error connecting to the data base: ${error}`)
+})

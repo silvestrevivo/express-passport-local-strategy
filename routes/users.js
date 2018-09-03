@@ -36,7 +36,7 @@ router.post('/register', (req, res) => {
   const errors = req.validationErrors() // expressValidator error function
 
   if (errors) {
-    //expressValidator displays the errors in the handlebaars
+    //expressValidator displays the errors in the handlebars
     res.render('register', {
       errors: errors,
     })
@@ -47,14 +47,9 @@ router.post('/register', (req, res) => {
       username: username,
       password: password,
     })
-    console.log('this is the new user: ', newUser)
+
     User.createUser(newUser, (err, user) => {
-      console.log('createUser activated')
-      if (err) {
-        console.log('this is the error trying to connecto to MLAB', err)
-        //throw err
-      }
-      console.log('this is the user: ', user)
+      if (err) throw err
 
       req.flash('success_msg', 'Your are registered and can now login')
 
@@ -101,5 +96,10 @@ router.post(
     res.redirect('/')
   },
 )
+/*
+  once we determinate to use passport as strategy to login, we use it as
+  middleware with passport.use(). Because in app.js, the middleware is already
+  initialized with app.use(passport.initialize())
+*/
 
 module.exports = router
