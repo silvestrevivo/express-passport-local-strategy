@@ -5,7 +5,7 @@ const router = express.Router()
 const passport = require('passport')
 const LocalStrategy = require('passport-local').Strategy
 
-const User = require('../models/users')
+const User = require('../models/users') // we bring user from models
 
 // Register page
 router.get('/register', (req, res) => {
@@ -41,7 +41,7 @@ router.post('/register', (req, res) => {
       errors: errors,
     })
   } else {
-    //checking for email and username are already taken
+    // checking for email and username are already taken using mongoose
     User.findOne({ username: {
       "$regex": "^" + username + "\\b", "$options": "i"
     }}, function (err, user) {
@@ -61,7 +61,7 @@ router.post('/register', (req, res) => {
             password: password
           })
 
-          User.createUser(newUser, function(err, user){
+          User.createUser(newUser, (err, user) =>{
             if (err) throw err;
             console.log(user);
 
@@ -120,7 +120,7 @@ router.post(
 */
 
 // Logout
-router.get('/logout', function(req, res){
+router.get('/logout', (req, res) => {
   req.logout()
 
   req.flash('success_msg', 'You are logged out')

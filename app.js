@@ -9,10 +9,10 @@ const expressValidator = require('express-validator')
 const flash = require('connect-flash')
 const session = require('express-session')
 const passport = require('passport')
-//const LocalStrategy = require('passport-local').Strategy
-const mongo = require('mongodb')
 const mongoose = require('mongoose')
 const { mLabDataBase } = require('./config/config')
+
+// connecting to data base
 mongoose.connect(mLabDataBase, { useNewUrlParser: true })
 const db = mongoose.connection
 
@@ -51,7 +51,7 @@ app.use(passport.session())
 // Express Validator
 app.use(
   expressValidator({
-    errorFormatter: function(param, msg, value) {
+    errorFormatter: (param, msg, value) => {
       var namespace = param.split('.'),
         root = namespace.shift(),
         formParam = root
@@ -72,7 +72,7 @@ app.use(
 app.use(flash())
 
 // Global Vars
-app.use(function(req, res, next) {
+app.use((req, res, next) => {
   res.locals.success_msg = req.flash('success_msg')
   res.locals.error_msg = req.flash('error_msg')
   res.locals.error = req.flash('error')
@@ -87,10 +87,11 @@ app.use('/users', users)
 app.set('port', process.env.PORT || 3000)
 
 // Once the connection is done, the server gets fired
+// Otherwise the app is not able to run
 db.once('open', () => {
   // making the app listening to port
-  app.listen(app.get('port'), function() {
-    console.log('Server started on port ' + app.get('port'))
+  app.listen(app.get('port'), ()  => {
+    console.log(`Server started on port ${app.get('port')}`)
   })
 }).on('error', error => {
   return console.warn(`Error connecting to the data base: ${error}`)
