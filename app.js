@@ -9,12 +9,15 @@ const expressValidator = require('express-validator')
 const flash = require('connect-flash')
 const session = require('express-session')
 const passport = require('passport')
-const LocalStrategy = require('passport-local').Strategy
+//const LocalStrategy = require('passport-local').Strategy
 const mongo = require('mongodb')
 const mongoose = require('mongoose')
 const { mLabDataBase } = require('./config/config')
-mongoose.connect(mLabDataBase)
-const db = mongoose.connection
+//mongoose.connect(mLabDataBase)
+//const db = mongoose.connection
+// mongoose.connection.once('open', () => console.log('Good to go!')).on('error', error => {
+//   console.warn('Warning', error)
+// })
 
 const routes = require('./routes/index')
 const users = require('./routes/users')
@@ -86,6 +89,28 @@ app.use('/users', users)
 // Set Port
 app.set('port', process.env.PORT || 3000)
 
-app.listen(app.get('port'), function() {
-  console.log('Server started on port ' + app.get('port'))
-})
+// // Connection to database
+// mongoose.connection.once('open', () => console.log('Good to go!')).on('error', error => {
+//   console.warn('Warning', error)
+// })
+
+// // Fire the server
+// app.listen(app.get('port'), function() {
+//   console.log('Server started on port ' + app.get('port'))
+// })
+
+mongoose.connect(
+  mLabDataBase,
+  { useNewUrlParser: true },
+  (err, res) => {
+    if (err) {
+      return console.log(`Error connecting to the data base: ${err}`)
+    }
+    console.log('Connected to the data base...')
+
+    // making the app listening to port
+    app.listen(app.get('port'), function() {
+      console.log('Server started on port ' + app.get('port'))
+    })
+  },
+)
